@@ -65,15 +65,34 @@ final class HslColor
         $g = intval($g, 16) / 255;
         $b = intval($b, 16) / 255;
 
+        return static::fromRgbValues($r, $g, $b);
+    }
+
+    /**
+     * Create a new instance from a RgbColor instance.
+     */
+    public static function fromRgbColor(RgbColor $rgbColor) : HslColor
+    {
+        $r = $rgbColor->getRed() / 255;
+        $g = $rgbColor->getGreen() / 255;
+        $b = $rgbColor->getBlue() / 255;
+
+        return static::fromRgbValues($r, $g, $b);
+    }
+
+    /**
+     * Create a new instance from a RGB values.
+     *
+     * @param  int|float  $r
+     * @param  int|float  $b
+     * @param  int|float  $g
+     */
+    private static function fromRgbValues($r, $g, $b) : HslColor
+    {
         $max = max($r, $g, $b);
         $min = min($r, $g, $b);
 
         $delta = $max - $min;
-
-        $lightness = ($max + $min) / 2;
-        $saturation = $delta !== 0
-            ? $delta / (1 - abs(2 * $lightness - 1))
-            : 0;
 
         if ($delta === 0) {
             $hue = 0;
@@ -84,6 +103,11 @@ final class HslColor
         } else {
             $hue = ($r - $g) / $delta + 4;
         }
+
+        $lightness = ($max + $min) / 2;
+        $saturation = $delta !== 0
+            ? $delta / (1 - abs(2 * $lightness - 1))
+            : 0;
 
         return new static(
             (int) round(($hue / 6) * 360),

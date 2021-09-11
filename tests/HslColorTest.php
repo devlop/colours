@@ -7,6 +7,7 @@ namespace Devlop\Colours\Tests;
 use Devlop\Colours\HexColor;
 use Devlop\Colours\HslColor;
 use Devlop\Colours\InvalidColorException;
+use Devlop\Colours\RgbColor;
 use Devlop\PHPUnit\ExceptionAssertions;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -81,6 +82,15 @@ final class HslColorTest extends TestCase
     }
 
     /** @test */
+    public function it_can_be_created_from_a_hex_string() : void
+    {
+        $this->assertInstanceOf(
+            HslColor::class,
+            HslColor::fromHexString('#ddffdd'),
+        );
+    }
+
+    /** @test */
     public function it_can_be_created_from_a_HexColor_instance() : void
     {
         $hexColor = new HexColor('#ddffdd');
@@ -88,15 +98,6 @@ final class HslColorTest extends TestCase
         $this->assertInstanceOf(
             HslColor::class,
             HslColor::fromHexColor($hexColor),
-        );
-    }
-
-    /** @test */
-    public function it_can_be_created_from_a_hex_string() : void
-    {
-        $this->assertInstanceOf(
-            HslColor::class,
-            HslColor::fromHexString('#ddffdd'),
         );
     }
 
@@ -130,6 +131,38 @@ final class HslColorTest extends TestCase
     public function getHexString_returns_hex_hexString() : void
     {
         $this->assertSame('#f97415', (new HslColor(25, 95, 53))->getHexString());
+    }
+
+    /** @test */
+    public function it_can_be_created_from_a_RgbColor_instance() : void
+    {
+        $rgbColor = new RgbColor(60, 120, 180);
+
+        $this->assertInstanceOf(
+            HslColor::class,
+            HslColor::fromRgbColor($rgbColor),
+        );
+    }
+
+    /**
+     * @test
+     * @dataProvider rgbValuesAndExpectedHslValuesProvider
+     */
+    public function it_has_expected_values_when_created_from_a_RgbColor_instance(
+        int $r,
+        int $g,
+        int $b,
+        int $expectedHue,
+        int $expectedSaturation,
+        int $expectedLightness
+    ) : void {
+        $hslColor = HslColor::fromRgbColor(
+            new RgbColor($r, $g, $b),
+        );
+
+        $this->assertSame($expectedHue, $hslColor->getHue());
+        $this->assertSame($expectedSaturation, $hslColor->getSaturation());
+        $this->assertSame($expectedLightness, $hslColor->getLightness());
     }
 
     public function validHslValuesProvider() : array
@@ -178,6 +211,17 @@ final class HslColorTest extends TestCase
             ['#6366F1', 239, 84, 67],
             ['#ffffff', 0, 0, 100],
             ['#000000', 0, 0, 0],
+        ];
+    }
+
+    public function rgbValuesAndExpectedHslValuesProvider() : array
+    {
+        return [
+            [255, 0, 0, 0, 100, 50],
+            [0, 0, 0, 0, 0, 0],
+            [255, 255, 255, 0, 0, 100],
+            [100, 100, 0, 60, 100, 20],
+            [171, 51, 18, 13, 81, 37],
         ];
     }
 }

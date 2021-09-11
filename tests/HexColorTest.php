@@ -118,15 +118,6 @@ final class HexColorTest extends TestCase
         $this->assertSame('9D', $b);
     }
 
-    /** @test */
-    public function it_converts_to_HslColor() : void
-    {
-        $this->assertInstanceOf(
-            HslColor::class,
-            (new HexColor('#D9F99D'))->toHsl(),
-        );
-    }
-
     /**
      * @test
      * @dataProvider validInputAndExpectedHexStringProvider
@@ -134,6 +125,15 @@ final class HexColorTest extends TestCase
     public function getHexString_returns_formatted_hex_string(string $input, string $expectedHexString) : void
     {
         $this->assertSame($expectedHexString, (new HexColor($input))->getHexString());
+    }
+
+    /** @test */
+    public function it_converts_to_HslColor() : void
+    {
+        $this->assertInstanceOf(
+            HslColor::class,
+            (new HexColor('#D9F99D'))->toHsl(),
+        );
     }
 
     /** @test */
