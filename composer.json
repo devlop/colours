@@ -1,0 +1,38 @@
+{
+    "name": "devlop/colours",
+    "description": "Collection of color classes to simplify working and converting colors in PHP.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Johan Rosenson",
+            "email": "johan@devlop.se"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "symfony/polyfill-php80": "^1.23"
+    },
+    "require-dev": {
+        "devlop/phpunit-exception-assertions": "^1.0",
+        "phpunit/phpunit": "^9.5",
+        "symfony/var-dumper": "^5.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Devlop\\Colours\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Devlop\\Colours\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    }
+}
