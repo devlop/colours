@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Devlop\Colours\Tests;
 
+use Devlop\Colours\HexColor;
 use Devlop\Colours\HslColor;
 use Devlop\Colours\InvalidColorException;
 use Devlop\Colours\RgbColor;
@@ -105,6 +106,21 @@ final class RgbColorTest extends TestCase
     public function getLightness_returns_hsl_lightness() : void
     {
         $this->assertSame(36, (new RgbColor(22, 163, 74))->getLightness());
+    }
+
+    /** @test */
+    public function it_converts_to_HexColor() : void
+    {
+        $this->assertInstanceOf(
+            HexColor::class,
+            (new RgbColor(126, 65, 143))->toHex(),
+        );
+    }
+
+    /** @test */
+    public function getHexString_returns_hex_hexString() : void
+    {
+        $this->assertSame('#7e418f', (new RgbColor(126, 65, 143))->getHexString());
     }
 
     public function validRgbValuesProvider() : array

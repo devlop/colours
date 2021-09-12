@@ -7,6 +7,7 @@ namespace Devlop\Colours\Tests;
 use Devlop\Colours\HexColor;
 use Devlop\Colours\HslColor;
 use Devlop\Colours\InvalidColorException;
+use Devlop\Colours\RgbColor;
 use Devlop\PHPUnit\ExceptionAssertions;
 use PHPUnit\Framework\TestCase;
 use Stringable;
@@ -181,6 +182,33 @@ final class HexColorTest extends TestCase
         $this->assertSame($expectedHexString, (string) HexColor::fromHslColor($hslColor));
     }
 
+    /** @test */
+    public function it_can_be_created_from_a_RgbColor_instance() : void
+    {
+        // #8C3518
+        $rgbColor = new RgbColor(140, 53, 24);
+
+        $this->assertInstanceOf(
+            HexColor::class,
+            HexColor::fromRgbColor($rgbColor),
+        );
+    }
+
+    /**
+     * @test
+     * @dataProvider rgbValuesAndExpectedHexStringProvider
+     */
+    public function it_has_expected_hex_string_when_created_from_rgb_values(
+        int $r,
+        int $g,
+        int $b,
+        string $expectedHexString
+    ) : void {
+        $rgbColor = new RgbColor($r, $g, $b);
+
+        $this->assertSame($expectedHexString, (string) HexColor::fromRgbColor($rgbColor));
+    }
+
     public function validHexStringsWithLeadingHashProvider() : array
     {
         return [
@@ -229,6 +257,14 @@ final class HexColorTest extends TestCase
             ['f97415', '#f97415'],
             ['#000', '#000000'],
             ['fff', '#ffffff'],
+        ];
+    }
+
+    public function rgbValuesAndExpectedHexStringProvider() : array
+    {
+        return [
+            [22, 163, 74, '#16a34a'],
+            [103, 232, 249, '#67e8f9'],
         ];
     }
 }

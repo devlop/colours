@@ -100,4 +100,20 @@ final class RgbColor
     {
         return $this->toHsl()->getLightness();
     }
+
+    /**
+     * Convert to HexColor.
+     */
+    public function toHex() : HexColor
+    {
+        return HexColor::fromRgbColor($this);
+    }
+
+    /**
+     * Get the hex string.
+     */
+    public function getHexString() : string
+    {
+        return $this->toHex()->getHexString();
+    }
 }

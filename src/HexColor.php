@@ -92,6 +92,23 @@ final class HexColor implements Stringable
     }
 
     /**
+     * Create a new instance from a RgbColor instance.
+     */
+    public static function fromRgbColor(RgbColor $rgbColor) : HexColor
+    {
+        $r = base_convert($rgbColor->getRed(), 10, 16);
+        $g = base_convert($rgbColor->getGreen(), 10, 16);
+        $b = base_convert($rgbColor->getBlue(), 10, 16);
+
+        return new static(implode('', [
+            '#',
+            str_pad($r, 2, '0', STR_PAD_LEFT),
+            str_pad($g, 2, '0', STR_PAD_LEFT),
+            str_pad($b, 2, '0', STR_PAD_LEFT),
+        ]));
+    }
+
+    /**
      * Checks if a hex string is valid.
      * If strict a leading hash is required.
      */
