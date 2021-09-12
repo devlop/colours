@@ -165,6 +165,33 @@ final class HslColorTest extends TestCase
         $this->assertSame($expectedLightness, $hslColor->getLightness());
     }
 
+    /** @test */
+    public function it_converts_to_RgbColor() : void
+    {
+        $this->assertInstanceOf(
+            RgbColor::class,
+            (new HslColor(82, 32, 52))->toRgb(),
+        );
+    }
+
+    /** @test */
+    public function getRed_returns_rgb_red() : void
+    {
+        $this->assertSame(73, (new HslColor(143, 36, 45))->getRed());
+    }
+
+    /** @test */
+    public function getGreen_returns_rgb_green() : void
+    {
+        $this->assertSame(156, (new HslColor(143, 36, 45))->getGreen());
+    }
+
+    /** @test */
+    public function getBlue_returns_rgb_blue() : void
+    {
+        $this->assertSame(105, (new HslColor(143, 36, 45))->getBlue());
+    }
+
     public function validHslValuesProvider() : array
     {
         return [

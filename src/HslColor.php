@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Devlop\Colours;
 
 use Devlop\Colours\InvalidColorException;
+use Devlop\Colours\RgbColor;
 
 final class HslColor
 {
@@ -146,6 +147,38 @@ final class HslColor
     public function toHex() : HexColor
     {
         return HexColor::fromHslColor($this);
+    }
+
+    /**
+     * Convert to RgbColor.
+     */
+    public function toRgb() : RgbColor
+    {
+        return RgbColor::fromHslColor($this);
+    }
+
+    /**
+     * Get the RGB red.
+     */
+    public function getRed() : int
+    {
+        return $this->toRgb()->getRed();
+    }
+
+    /**
+     * Get the RGB green.
+     */
+    public function getGreen() : int
+    {
+        return $this->toRgb()->getGreen();
+    }
+
+    /**
+     * Get the RGB blue.
+     */
+    public function getBlue() : int
+    {
+        return $this->toRgb()->getBlue();
     }
 
     /**

@@ -46,6 +46,41 @@ final class RgbColor
     }
 
     /**
+     * Create a new instance from a HslColor instance.
+     */
+    public static function fromHslColor(HslColor $hslColor) : RgbColor
+    {
+        $hue = $hslColor->getHue();
+        $saturation = $hslColor->getSaturation() / 100;
+        $lightness = $hslColor->getLightness() / 100;
+
+        $chroma = (1 - abs((2 * $lightness) - 1)) * $saturation;
+        $secondComponent = $chroma * (1 - abs(fmod(($hue / 60), 2) - 1));
+
+        if ($hue < 60) {
+            [$r, $g, $b] = [$chroma, $secondComponent, 0];
+        } elseif ($hue < 120) {
+            [$r, $g, $b] = [$secondComponent, $chroma, 0];
+        } elseif ($hue < 180) {
+            [$r, $g, $b] = [0, $chroma, $secondComponent];
+        } elseif ($hue < 240) {
+            [$r, $g, $b] = [0, $secondComponent, $chroma];
+        } elseif ($hue < 300) {
+            [$r, $g, $b] = [$secondComponent, 0, $chroma];
+        } else {
+            [$r, $g, $b] = [$chroma, 0, $secondComponent];
+        }
+
+        $lightnessModifier = $lightness - ($chroma / 2);
+
+        $r = (int) round(($r + $lightnessModifier) * 255);
+        $g = (int) round(($g + $lightnessModifier) * 255);
+        $b = (int) round(($b + $lightnessModifier) * 255);
+
+        return new static($r, $g, $b);
+    }
+
+    /**
      * Create a new instance from a hex string, example: #fe02dc
      */
     public static function fromHexString(string $hexString) : RgbColor

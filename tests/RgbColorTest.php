@@ -160,6 +160,39 @@ final class RgbColorTest extends TestCase
         $this->assertSame($expectedBlue, $rgbColor->getBlue());
     }
 
+    /** @test */
+    public function it_can_be_created_from_a_HslColor_instance() : void
+    {
+        // #74D928
+        $hslColor = new HslColor(94, 70, 50);
+
+        $this->assertInstanceOf(
+            RgbColor::class,
+            RgbColor::fromHslColor($hslColor),
+        );
+    }
+
+    /**
+     * @test
+     * @dataProvider hslValuesAndExpectedRgbValuesProvider
+     */
+    public function it_has_expected_values_when_created_from_a_HslColor_instance(
+        int $hue,
+        int $saturation,
+        int $lightness,
+        int $expectedRed,
+        int $expectedGreen,
+        int $expectedBlue
+    ) : void {
+        $rgbColor = RgbColor::fromHslColor(
+            new HslColor($hue, $saturation, $lightness),
+        );
+
+        $this->assertSame($expectedRed, $rgbColor->getRed());
+        $this->assertSame($expectedGreen, $rgbColor->getGreen());
+        $this->assertSame($expectedBlue, $rgbColor->getBlue());
+    }
+
     public function validRgbValuesProvider() : array
     {
         return [
@@ -209,6 +242,17 @@ final class RgbColorTest extends TestCase
             ['#E0A280', 224, 162, 128],
             ['#ffffff', 255, 255, 255],
             ['#000000', 0, 0, 0],
+        ];
+    }
+
+    public function hslValuesAndExpectedRgbValuesProvider() : array
+    {
+        return [
+            [0, 0, 100, 255, 255, 255],
+            [0, 0, 0, 0, 0, 0],
+            [336, 73, 49, 216, 34, 107],
+            [69, 50, 78, 219, 227, 171],
+            [159, 33, 34, 58, 115, 95],
         ];
     }
 }
