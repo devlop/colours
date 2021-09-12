@@ -63,6 +63,45 @@ final class HslColorTest extends TestCase
         });
     }
 
+    /**
+     * @test
+     * @dataProvider invalidHueProvider
+     */
+    public function when_created_with_invalid_hue_the_exception_message_contains_the_invalid_value(int $hue, int $saturation, int $lightness) : void
+    {
+        $this->assertExceptionThrown(InvalidColorException::class, function () use ($hue, $saturation, $lightness) : void {
+            new HslColor($hue, $saturation, $lightness);
+        }, function (InvalidColorException $exception) use ($hue) : void {
+            $this->assertStringContainsString("\"{$hue}\"", $exception->getMessage());
+        });
+    }
+
+    /**
+     * @test
+     * @dataProvider invalidSaturationProvider
+     */
+    public function when_created_with_invalid_saturation_the_exception_message_contains_the_invalid_value(int $hue, int $saturation, int $lightness) : void
+    {
+        $this->assertExceptionThrown(InvalidColorException::class, function () use ($hue, $saturation, $lightness) : void {
+            new HslColor($hue, $saturation, $lightness);
+        }, function (InvalidColorException $exception) use ($saturation) : void {
+            $this->assertStringContainsString("\"{$saturation}\"", $exception->getMessage());
+        });
+    }
+
+    /**
+     * @test
+     * @dataProvider invalidLightnessProvider
+     */
+    public function when_created_with_invalid_lightness_the_exception_message_contains_the_invalid_value(int $hue, int $saturation, int $lightness) : void
+    {
+        $this->assertExceptionThrown(InvalidColorException::class, function () use ($hue, $saturation, $lightness) : void {
+            new HslColor($hue, $saturation, $lightness);
+        }, function (InvalidColorException $exception) use ($lightness) : void {
+            $this->assertStringContainsString("\"{$lightness}\"", $exception->getMessage());
+        });
+    }
+
     /** @test */
     public function getHue_returns_hue() : void
     {

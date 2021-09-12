@@ -19,21 +19,21 @@ final class HslColor
     {
         if ($hue < 0 || $hue > 360) {
             throw new InvalidColorException(sprintf(
-                '"%1$u" is not a supported hue, must be between 0 and 360.',
+                '"%1$d" is not a supported hue, must be between 0 and 360.',
                 $hue,
             ));
         }
 
         if ($saturation < 0 || $saturation > 100) {
             throw new InvalidColorException(sprintf(
-                '"%1$u" is not a supported saturation, must be between 0 and 100.',
+                '"%1$d" is not a supported saturation, must be between 0 and 100.',
                 $saturation,
             ));
         }
 
         if ($lightness < 0 || $lightness > 100) {
             throw new InvalidColorException(sprintf(
-                '"%1$u" is not a supported lightness, must be between 0 and 100.',
+                '"%1$d" is not a supported lightness, must be between 0 and 100.',
                 $lightness,
             ));
         }

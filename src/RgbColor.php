@@ -19,21 +19,21 @@ final class RgbColor
     {
         if ($red < 0 || $red > 255) {
             throw new InvalidColorException(sprintf(
-                '"%1$u" is not a supported value, red must be between 0 and 255.',
+                '"%1$d" is not a supported value, red must be between 0 and 255.',
                 $red,
             ));
         }
 
         if ($green < 0 || $green > 255) {
             throw new InvalidColorException(sprintf(
-                '"%1$u" is not a supported value, green must be between 0 and 255.',
+                '"%1$d" is not a supported value, green must be between 0 and 255.',
                 $green,
             ));
         }
 
         if ($blue < 0 || $blue > 255) {
             throw new InvalidColorException(sprintf(
-                '"%1$u" is not a supported value, blue must be between 0 and 255.',
+                '"%1$d" is not a supported value, blue must be between 0 and 255.',
                 $blue,
             ));
         }

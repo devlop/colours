@@ -63,6 +63,45 @@ final class RgbColorTest extends TestCase
         });
     }
 
+    /**
+     * @test
+     * @dataProvider invalidRedProvider
+     */
+    public function when_created_with_invalid_red_the_exception_message_contains_the_invalid_value(int $red, int $green, int $blue) : void
+    {
+        $this->assertExceptionThrown(InvalidColorException::class, function () use ($red, $green, $blue) : void {
+            new RgbColor($red, $green, $blue);
+        }, function (InvalidColorException $exception) use ($red) : void {
+            $this->assertStringContainsString("\"{$red}\"", $exception->getMessage());
+        });
+    }
+
+    /**
+     * @test
+     * @dataProvider invalidGreenProvider
+     */
+    public function when_created_with_invalid_blue_the_exception_message_contains_the_invalid_value(int $red, int $green, int $blue) : void
+    {
+        $this->assertExceptionThrown(InvalidColorException::class, function () use ($red, $green, $blue) : void {
+            new RgbColor($red, $green, $blue);
+        }, function (InvalidColorException $exception) use ($green) : void {
+            $this->assertStringContainsString("\"{$green}\"", $exception->getMessage());
+        });
+    }
+
+    /**
+     * @test
+     * @dataProvider invalidBlueProvider
+     */
+    public function when_created_with_invalid_green_the_exception_message_contains_the_invalid_value(int $red, int $green, int $blue) : void
+    {
+        $this->assertExceptionThrown(InvalidColorException::class, function () use ($red, $green, $blue) : void {
+            new RgbColor($red, $green, $blue);
+        }, function (InvalidColorException $exception) use ($blue) : void {
+            $this->assertStringContainsString("\"{$blue}\"", $exception->getMessage());
+        });
+    }
+
     /** @test */
     public function getRed_returns_red() : void
     {

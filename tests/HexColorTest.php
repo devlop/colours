@@ -62,6 +62,30 @@ final class HexColorTest extends TestCase
         });
     }
 
+    /** @test */
+    public function when_created_with_invalid_hex_string_the_exception_message_contains_the_invalid_input() : void
+    {
+        $input = 'xxx';
+
+        $this->assertExceptionThrown(InvalidColorException::class, function () use ($input) : void {
+            new HexColor($input);
+        }, function (InvalidColorException $exception) use ($input) : void {
+            $this->assertStringContainsString("\"{$input}\"", $exception->getMessage());
+        });
+    }
+
+    /** @test */
+    public function when_created_without_leading_hash_in_strict_mode_the_exception_message_contains_the_invalid_input() : void
+    {
+        $input = 'a78770';
+
+        $this->assertExceptionThrown(InvalidColorException::class, function () use ($input) : void {
+            new HexColor($input, true);
+        }, function (InvalidColorException $exception) use ($input) : void {
+            $this->assertStringContainsString("\"{$input}\"", $exception->getMessage());
+        });
+    }
+
     /**
      * @test
      * @dataProvider invalidHexStringsProvider
