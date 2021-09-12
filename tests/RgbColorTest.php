@@ -123,6 +123,43 @@ final class RgbColorTest extends TestCase
         $this->assertSame('#7e418f', (new RgbColor(126, 65, 143))->getHexString());
     }
 
+    /** @test */
+    public function it_can_be_created_from_a_hex_string() : void
+    {
+        $this->assertInstanceOf(
+            RgbColor::class,
+            RgbColor::fromHexString('#fe02dc'),
+        );
+    }
+
+    /** @test */
+    public function it_can_be_created_from_a_HexColor_instance() : void
+    {
+        $hexColor = new HexColor('#790370');
+
+        $this->assertInstanceOf(
+            RgbColor::class,
+            RgbColor::fromHexColor($hexColor),
+        );
+    }
+
+    /**
+     * @test
+     * @dataProvider hexStringAndExpectedRgbValuesProvider
+     */
+    public function it_has_expected_rgb_values_when_created_from_a_hex_string(
+        string $hexString,
+        int $expectedRed,
+        int $expectedGreen,
+        int $expectedBlue
+    ) : void {
+        $rgbColor = RgbColor::fromHexString($hexString);
+
+        $this->assertSame($expectedRed, $rgbColor->getRed());
+        $this->assertSame($expectedGreen, $rgbColor->getGreen());
+        $this->assertSame($expectedBlue, $rgbColor->getBlue());
+    }
+
     public function validRgbValuesProvider() : array
     {
         return [
@@ -160,6 +197,18 @@ final class RgbColorTest extends TestCase
             [66, 66, -10],
             [66, 66, 256],
             [66, 66, 512],
+        ];
+    }
+
+    public function hexStringAndExpectedRgbValuesProvider() : array
+    {
+        return [
+            ['#36E149', 54, 225, 73],
+            ['#965D52', 150, 93, 82],
+            ['#30ECD8', 48, 236, 216],
+            ['#E0A280', 224, 162, 128],
+            ['#ffffff', 255, 255, 255],
+            ['#000000', 0, 0, 0],
         ];
     }
 }

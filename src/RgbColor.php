@@ -46,6 +46,30 @@ final class RgbColor
     }
 
     /**
+     * Create a new instance from a hex string, example: #fe02dc
+     */
+    public static function fromHexString(string $hexString) : RgbColor
+    {
+        $hexColor = new HexColor($hexString);
+
+        return static::fromHexColor($hexColor);
+    }
+
+    /**
+     * Create a new instance from a HexColor instance.
+     */
+    public static function fromHexColor(HexColor $hexColor) : RgbColor
+    {
+        ['r' => $r, 'g' => $g, 'b' => $b] = $hexColor->getParts();
+
+        return new static(
+            intval($r, 16),
+            intval($g, 16),
+            intval($b, 16),
+        );
+    }
+
+    /**
      * Get the value for red.
      */
     public function getRed() : int
