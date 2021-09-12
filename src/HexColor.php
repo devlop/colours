@@ -176,6 +176,38 @@ final class HexColor implements Stringable
     }
 
     /**
+     * Convert to RgbColor.
+     */
+    public function toRgb() : RgbColor
+    {
+        return RgbColor::fromHexColor($this);
+    }
+
+    /**
+     * Get the RGB red.
+     */
+    public function getRed() : int
+    {
+        return $this->toRgb()->getRed();
+    }
+
+    /**
+     * Get the RGB green.
+     */
+    public function getGreen() : int
+    {
+        return $this->toRgb()->getGreen();
+    }
+
+    /**
+     * Get the RGB blue.
+     */
+    public function getBlue() : int
+    {
+        return $this->toRgb()->getBlue();
+    }
+
+    /**
      * Get the string representation of the HexColor.
      */
     public function __toString() : string

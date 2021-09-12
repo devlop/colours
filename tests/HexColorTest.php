@@ -209,6 +209,33 @@ final class HexColorTest extends TestCase
         $this->assertSame($expectedHexString, (string) HexColor::fromRgbColor($rgbColor));
     }
 
+    /** @test */
+    public function it_converts_to_RgbColor() : void
+    {
+        $this->assertInstanceOf(
+            RgbColor::class,
+            (new HexColor('#43F78B'))->toRgb(),
+        );
+    }
+
+    /** @test */
+    public function getRed_returns_rgb_red() : void
+    {
+        $this->assertSame(155, (new HexColor('#9BBDD6'))->getRed());
+    }
+
+    /** @test */
+    public function getGreen_returns_rgb_green() : void
+    {
+        $this->assertSame(189, (new HexColor('#9BBDD6'))->getGreen());
+    }
+
+    /** @test */
+    public function getBlue_returns_rgb_blue() : void
+    {
+        $this->assertSame(214, (new HexColor('#9BBDD6'))->getBlue());
+    }
+
     public function validHexStringsWithLeadingHashProvider() : array
     {
         return [
