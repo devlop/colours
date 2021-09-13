@@ -5,7 +5,7 @@
 
 # Colours
 
-Collection of color classes to simplify working and converting colors in PHP.
+Collection of color classes to simplify working with and converting colors in PHP.
 
 # Installation
 
