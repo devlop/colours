@@ -136,6 +136,14 @@ final class HexColor implements Stringable
     }
 
     /**
+     * Get the hex string.
+     */
+    public function getHexString() : string
+    {
+        return $this->hexString;
+    }
+
+    /**
      * Convert to HslColor.
      */
     public function toHsl() : HslColor
@@ -157,94 +165,6 @@ final class HexColor implements Stringable
     public function toCmyk() : CmykColor
     {
         return CmykColor::fromHexColor($this);
-    }
-
-    /**
-     * Get the HSL hue.
-     */
-    public function getHue() : int
-    {
-        return $this->toHsl()->getHue();
-    }
-
-    /**
-     * Get the HSL saturation.
-     */
-    public function getSaturation() : int
-    {
-        return $this->toHsl()->getSaturation();
-    }
-
-    /**
-     * Get the HSL lightness.
-     */
-    public function getLightness() : int
-    {
-        return $this->toHsl()->getLightness();
-    }
-
-    /**
-     * Get the hex string.
-     */
-    public function getHexString() : string
-    {
-        return $this->hexString;
-    }
-
-    /**
-     * Get the RGB red.
-     */
-    public function getRed() : int
-    {
-        return $this->toRgb()->getRed();
-    }
-
-    /**
-     * Get the RGB green.
-     */
-    public function getGreen() : int
-    {
-        return $this->toRgb()->getGreen();
-    }
-
-    /**
-     * Get the RGB blue.
-     */
-    public function getBlue() : int
-    {
-        return $this->toRgb()->getBlue();
-    }
-
-    /**
-     * Get the CMYK cyan value.
-     */
-    public function getCyan() : int
-    {
-        return $this->toCmyk()->getCyan();
-    }
-
-    /**
-     * Get the CMYK magenta value.
-     */
-    public function getMagenta() : int
-    {
-        return $this->toCmyk()->getMagenta();
-    }
-
-    /**
-     * Get the CMYK yellow value.
-     */
-    public function getYellow() : int
-    {
-        return $this->toCmyk()->getYellow();
-    }
-
-    /**
-     * Get the CMYK key value.
-     */
-    public function getKey() : int
-    {
-        return $this->toCmyk()->getKey();
     }
 
     /**

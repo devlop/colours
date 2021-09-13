@@ -13,190 +13,106 @@ use Devlop\PHPUnit\ExceptionAssertions;
 use PHPUnit\Framework\TestCase;
 use Stringable;
 
+/**
+ * @group hex
+ */
 final class HexColorTest extends TestCase
 {
     use ExceptionAssertions;
 
-    /** @test */
-    public function is_stringable() : void
-    {
-        $this->assertInstanceOf(Stringable::class, new HexColor('#ffeedd'));
-    }
-
-    /** @test */
-    public function it_can_be_created_with_a_full_hex_string_with_leading_hash() : void
-    {
-        $this->assertSame('#ff0011', (string) (new HexColor('#ff0011')));
-    }
-
-    /** @test */
-    public function it_can_be_created_with_a_full_hex_string_without_leading_hash() : void
-    {
-        $this->assertSame('#d98ce0', (string) (new HexColor('d98ce0')));
-    }
-
-    /** @test */
-    public function it_cannot_be_created_with_a_full_hex_string_without_leading_hash_in_strict_mode() : void
-    {
-        $this->assertExceptionThrown(InvalidColorException::class, function () : void {
-            new HexColor('d98ce0', true);
-        });
-    }
-
-    /** @test */
-    public function it_can_be_created_with_a_short_hex_string_with_leading_hash() : void
-    {
-        $this->assertSame('#ffddee', (string) (new HexColor('#fde')));
-    }
-
-    /** @test */
-    public function it_can_be_created_with_a_short_hex_string_without_leading_hash() : void
-    {
-        $this->assertSame('#aabbcc', (string) (new HexColor('abc')));
-    }
-
-    /** @test */
-    public function it_cannot_be_created_with_a_short_hex_string_without_leading_hash_in_strict_mode() : void
-    {
-        $this->assertExceptionThrown(InvalidColorException::class, function () : void {
-            new HexColor('abc', true);
-        });
-    }
-
-    /** @test */
-    public function when_created_with_invalid_hex_string_the_exception_message_contains_the_invalid_input() : void
-    {
-        $input = 'xxx';
-
-        $this->assertExceptionThrown(InvalidColorException::class, function () use ($input) : void {
-            new HexColor($input);
-        }, function (InvalidColorException $exception) use ($input) : void {
-            $this->assertStringContainsString("\"{$input}\"", $exception->getMessage());
-        });
-    }
-
-    /** @test */
-    public function when_created_without_leading_hash_in_strict_mode_the_exception_message_contains_the_invalid_input() : void
-    {
-        $input = 'a78770';
-
-        $this->assertExceptionThrown(InvalidColorException::class, function () use ($input) : void {
-            new HexColor($input, true);
-        }, function (InvalidColorException $exception) use ($input) : void {
-            $this->assertStringContainsString("\"{$input}\"", $exception->getMessage());
-        });
-    }
-
     /**
      * @test
-     * @dataProvider invalidHexStringsProvider
+     * @dataProvider validLongHexStringProvider
      */
-    public function it_cannot_be_created_with_invalid_hex_strings(string $invalidHexString) : void
+    public function it_can_be_created_with_a_long_hexString(string $hexString) : void
     {
-        $this->assertExceptionThrown(InvalidColorException::class, function () use ($invalidHexString) : void {
-            new HexColor($invalidHexString);
-        });
-    }
-
-    /**
-     * @test
-     * @dataProvider validHexStringsWithLeadingHashProvider
-     */
-    public function isValid_returns_true_for_valid_hex_strings_with_leading_hash(string $validHexString) : void
-    {
-        $this->assertTrue(HexColor::isValid($validHexString));
-    }
-
-    /**
-     * @test
-     * @dataProvider validHexStringsWithoutLeadingHashProvider
-     */
-    public function isValid_returns_true_for_valid_hex_strings_without_leading_hash_without_strict_mode(string $validHexString) : void
-    {
-        $this->assertTrue(HexColor::isValid($validHexString, false));
-    }
-
-    /**
-     * @test
-     * @dataProvider validHexStringsWithoutLeadingHashProvider
-     */
-    public function isValid_returns_false_for_valid_hex_strings_without_leading_hash_with_strict_mode(string $validHexString) : void
-    {
-        $this->assertFalse(HexColor::isValid($validHexString, true));
-    }
-
-    /**
-     * @test
-     * @dataProvider invalidHexStringsProvider
-     */
-    public function isValid_returns_false_for_invalid_hex_strings(string $invalidHexString) : void
-    {
-        $this->assertFalse(HexColor::isValid($invalidHexString));
-    }
-
-    /** @test */
-    public function getParts_returns_the_r_g_b_values_as_associative_array() : void
-    {
-        ['r' => $r, 'g' => $g, 'b' => $b] = (new HexColor('#D9F99D'))->getParts();
-
-        $this->assertSame('D9', $r);
-        $this->assertSame('F9', $g);
-        $this->assertSame('9D', $b);
-    }
-
-    /**
-     * @test
-     * @dataProvider validInputAndExpectedHexStringProvider
-     */
-    public function getHexString_returns_formatted_hex_string(string $input, string $expectedHexString) : void
-    {
-        $this->assertSame($expectedHexString, (new HexColor($input))->getHexString());
-    }
-
-    /** @test */
-    public function it_converts_to_HslColor() : void
-    {
-        $this->assertInstanceOf(
-            HslColor::class,
-            (new HexColor('#D9F99D'))->toHsl(),
-        );
-    }
-
-    /** @test */
-    public function getHue_returns_hsl_hue() : void
-    {
-        $this->assertSame(31, (new HexColor('#fdba74'))->getHue());
-    }
-
-    /** @test */
-    public function getSaturation_returns_hsl_saturation() : void
-    {
-        $this->assertSame(97, (new HexColor('#fdba74'))->getSaturation());
-    }
-
-    /** @test */
-    public function getLightness_returns_hsl_lightness() : void
-    {
-        $this->assertSame(72, (new HexColor('#fdba74'))->getLightness());
-    }
-
-    /** @test */
-    public function it_can_be_created_from_a_HslColor_instance() : void
-    {
-        // 0F172A
-        $hslColor = new HslColor(222, 47, 11);
-
         $this->assertInstanceOf(
             HexColor::class,
-            HexColor::fromHslColor($hslColor),
+            new HexColor($hexString),
         );
     }
 
     /**
      * @test
+     * @dataProvider validHashlessLongHexStringProvider
+     */
+    public function it_can_be_created_with_a_hashless_long_hexString(string $hexString) : void
+    {
+        $this->assertInstanceOf(
+            HexColor::class,
+            new HexColor($hexString),
+        );
+    }
+
+    /**
+     * @test
+     * @dataProvider validShortHexStringProvider
+     */
+    public function it_can_be_created_with_a_short_hexString(string $hexString) : void
+    {
+        $this->assertInstanceOf(
+            HexColor::class,
+            new HexColor($hexString),
+        );
+    }
+
+    /**
+     * @test
+     * @dataProvider validHashlessShortHexStringProvider
+     */
+    public function it_can_be_created_with_a_hashless_short_hexString(string $hexString) : void
+    {
+        $this->assertInstanceOf(
+            HexColor::class,
+            new HexColor($hexString)
+        );
+    }
+
+    /**
+     * @test
+     * @dataProvider validHashlessLongHexStringProvider
+     */
+    public function it_cannot_be_created_with_a_full_hexString_without_leading_hash_in_strict_mode(string $hexString) : void
+    {
+        $this->assertExceptionThrown(InvalidColorException::class, function () use ($hexString) : void {
+            new HexColor($hexString, true);
+        }, function (InvalidColorException $exception) use ($hexString) : void {
+            $this->assertStringContainsString("\"{$hexString}\"", $exception->getMessage());
+        });
+    }
+
+    /**
+     * @test
+     * @dataProvider validHashlessShortHexStringProvider
+     */
+    public function it_cannot_be_created_with_a_short_hexString_without_leading_hash_in_strict_mode(string $hexString) : void
+    {
+        $this->assertExceptionThrown(InvalidColorException::class, function () use ($hexString) : void {
+            new HexColor($hexString, true);
+        }, function (InvalidColorException $exception) use ($hexString) : void {
+            $this->assertStringContainsString("\"{$hexString}\"", $exception->getMessage());
+        });
+    }
+
+    /**
+     * @test
+     * @dataProvider invalidHexStringsProvider
+     */
+    public function it_cannot_be_created_with_invalid_hexStrings(string $hexString) : void
+    {
+        $this->assertExceptionThrown(InvalidColorException::class, function () use ($hexString) : void {
+            new HexColor($hexString);
+        }, function (InvalidColorException $exception) use ($hexString) : void {
+            $this->assertStringContainsString("\"{$hexString}\"", $exception->getMessage());
+        });
+    }
+
+    /**
+     * @test
+     * @group hsl
      * @dataProvider hslValuesAndExpectedHexStringProvider
      */
-    public function it_has_expected_hex_string_when_created_from_hsl_values(
+    public function it_can_be_created_from_a_HslColor_instance(
         int $hue,
         int $saturation,
         int $lightness,
@@ -207,23 +123,12 @@ final class HexColorTest extends TestCase
         $this->assertSame($expectedHexString, (string) HexColor::fromHslColor($hslColor));
     }
 
-    /** @test */
-    public function it_can_be_created_from_a_RgbColor_instance() : void
-    {
-        // #8C3518
-        $rgbColor = new RgbColor(140, 53, 24);
-
-        $this->assertInstanceOf(
-            HexColor::class,
-            HexColor::fromRgbColor($rgbColor),
-        );
-    }
-
     /**
      * @test
+     * @group rgb
      * @dataProvider rgbValuesAndExpectedHexStringProvider
      */
-    public function it_has_expected_hex_string_when_created_from_rgb_values(
+    public function it_can_be_created_from_a_RgbColor_instance(
         int $r,
         int $g,
         int $b,
@@ -234,100 +139,180 @@ final class HexColorTest extends TestCase
         $this->assertSame($expectedHexString, (string) HexColor::fromRgbColor($rgbColor));
     }
 
+    /**
+     * @test
+     * @dataProvider validLongHexStringProvider
+     */
+    public function isValid_returns_true_for_valid_long_hexStrings(string $hexString) : void
+    {
+        $this->assertTrue(HexColor::isValid($hexString));
+    }
+
+    /**
+     * @test
+     * @dataProvider validHashlessLongHexStringProvider
+     */
+    public function isValid_returns_true_for_valid_hashless_long_hexStrings_when_not_strict_mode(string $hexString) : void
+    {
+        $this->assertTrue(HexColor::isValid($hexString, false));
+    }
+
+    /**
+     * @test
+     * @dataProvider validHashlessLongHexStringProvider
+     */
+    public function isValid_returns_false_for_valid_hashless_long_hexStrings_when_in_strict_mode(string $hexString) : void
+    {
+        $this->assertFalse(HexColor::isValid($hexString, true));
+    }
+
+    /**
+     * @test
+     * @dataProvider invalidHexStringsProvider
+     */
+    public function isValid_returns_false_for_invalid_hexStrings(string $hexString) : void
+    {
+        $this->assertFalse(HexColor::isValid($hexString));
+    }
+
+    /**
+     * @test
+     * @dataProvider validLongHexStringProvider
+     */
+    public function getHexString_returns_hexString(string $hexString) : void
+    {
+        $this->assertSame($hexString, (new HexColor($hexString))->getHexString());
+    }
+
     /** @test */
-    public function it_converts_to_RgbColor() : void
+    public function is_stringable() : void
+    {
+        $this->assertInstanceOf(
+            Stringable::class,
+            new HexColor('#abcdef'),
+        );
+    }
+
+    /**
+     * @test
+     * @dataProvider validLongHexStringProvider
+     */
+    public function casting_to_string_outputs_hexString(string $hexString) : void
+    {
+        $hexColor = new HexColor($hexString);
+
+        $this->assertSame(
+            $hexColor->getHexString(),
+            (string) $hexColor,
+        );
+    }
+
+    /**
+     * @test
+     * @dataProvider validShortHexStringsAndExpectedEquivalentLongHexStringProvider
+     */
+    public function getHexString_returns_long_hexString_if_created_with_short_hexString(string $shortHexString, $expectedLongHexString) : void
+    {
+        $hexColor = new HexColor($shortHexString);
+
+        $this->assertSame(
+            $expectedLongHexString,
+            $hexColor->getHexString(),
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function getParts_returns_the_r_g_b_values_as_associative_array() : void
+    {
+        ['r' => $r, 'g' => $g, 'b' => $b] = (new HexColor('#D9F99D'))->getParts();
+
+        $this->assertSame('D9', $r);
+        $this->assertSame('F9', $g);
+        $this->assertSame('9D', $b);
+    }
+
+    /** @_test */
+    public function it_converts_to_HslColor() : void
+    {
+        $this->assertInstanceOf(
+            HslColor::class,
+            (new HexColor('#D9F99D'))->toHsl(),
+        );
+    }
+
+    /**
+     * @test
+     * @group rgb
+     * @dataProvider validLongHexStringProvider
+     * @dataProvider validShortHexStringProvider
+     */
+    public function it_converts_to_RgbColor(string $hexString) : void
     {
         $this->assertInstanceOf(
             RgbColor::class,
-            (new HexColor('#43F78B'))->toRgb(),
+            (new HexColor($hexString))->toRgb(),
         );
-    }
-
-    /** @test */
-    public function getRed_returns_rgb_red() : void
-    {
-        $this->assertSame(155, (new HexColor('#9BBDD6'))->getRed());
-    }
-
-    /** @test */
-    public function getGreen_returns_rgb_green() : void
-    {
-        $this->assertSame(189, (new HexColor('#9BBDD6'))->getGreen());
-    }
-
-    /** @test */
-    public function getBlue_returns_rgb_blue() : void
-    {
-        $this->assertSame(214, (new HexColor('#9BBDD6'))->getBlue());
     }
 
     /**
      * @test
      * @group cmyk
+     * @dataProvider validLongHexStringProvider
+     * @dataProvider validShortHexStringProvider
      */
-    public function it_converts_to_CmykColor() : void
+    public function it_converts_to_CmykColor(string $hexString) : void
     {
         $this->assertInstanceOf(
             CmykColor::class,
-            (new HexColor('#709e52'))->toCmyk(),
+            (new HexColor($hexString))->toCmyk(),
         );
     }
 
-    /**
-     * @test
-     * @group cmyk
-     */
-    public function getCyan_returns_cmyk_cyan() : void
-    {
-        $this->assertSame(29, (new HexColor('#709e52'))->getCyan());
-    }
-
-    /**
-     * @test
-     * @group cmyk
-     */
-    public function getMagenta_returns_cmyk_magenta() : void
-    {
-        $this->assertSame(0, (new HexColor('#709e52'))->getMagenta());
-    }
-
-    /**
-     * @test
-     * @group cmyk
-     */
-    public function getYellow_returns_cmyk_yellow() : void
-    {
-        $this->assertSame(48, (new HexColor('#709e52'))->getYellow());
-    }
-
-    /**
-     * @test
-     * @group cmyk
-     */
-    public function getKey_returns_cmyk_key() : void
-    {
-        $this->assertSame(38, (new HexColor('#709e52'))->getKey());
-    }
-
-    public function validHexStringsWithLeadingHashProvider() : array
+    public function validLongHexStringProvider() : array
     {
         return [
             ['#DC2626'],
             ['#A1A1AA'],
             ['#ca8a04'],
-            ['#000'],
-            ['#fff'],
+            ['#499C69'],
+            ['#3E733B'],
         ];
     }
 
-    public function validHexStringsWithoutLeadingHashProvider() : array
+    public function validHashlessLongHexStringProvider() : array
     {
         return [
             ['DC2626'],
             ['A1A1AA'],
             ['ca8a04'],
+            ['499C69'],
+            ['3E733B'],
+        ];
+    }
+
+    public function validShortHexStringProvider() : array
+    {
+        return [
+            ['#000'],
+            ['#fff'],
+            ['#f00'],
+            ['#ff0'],
+            ['#0f0'],
+            ['#c2b'],
+        ];
+    }
+
+    public function validHashlessShortHexStringProvider() : array
+    {
+        return [
             ['000'],
             ['fff'],
+            ['f00'],
+            ['ff0'],
+            ['0f0'],
+            ['c2b'],
         ];
     }
 
@@ -339,6 +324,21 @@ final class HexColorTest extends TestCase
             ['ffff0'],
             ['#f0'],
             ['f0'],
+            ['email@example.com'],
+            ['random string'],
+            ['#ff dcc'],
+        ];
+    }
+
+    public function validShortHexStringsAndExpectedEquivalentLongHexStringProvider() : array
+    {
+        return [
+            ['#000', '#000000'],
+            ['#fff', '#ffffff'],
+            ['#f00', '#ff0000'],
+            ['#ff0', '#ffff00'],
+            ['#0f0', '#00ff00'],
+            ['#c2b', '#cc22bb'],
         ];
     }
 
@@ -347,16 +347,6 @@ final class HexColorTest extends TestCase
         return [
             [222, 47, 11, '#0f1729'],
             [25, 95, 53, '#f97415'],
-        ];
-    }
-
-    public function validInputAndExpectedHexStringProvider() : array
-    {
-        return [
-            ['#0f1729', '#0f1729'],
-            ['f97415', '#f97415'],
-            ['#000', '#000000'],
-            ['fff', '#ffffff'],
         ];
     }
 

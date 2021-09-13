@@ -78,7 +78,7 @@ final class RgbColorTest extends TestCase
      * @group hex
      * @dataProvider hexStringAndExpectedRgbValuesProvider
      */
-    public function it_can_be_created_from_a_hex_string(
+    public function it_can_be_created_from_a_hexString(
         string $hexString,
         int $expectedRed,
         int $expectedGreen,
