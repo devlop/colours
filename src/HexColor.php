@@ -12,9 +12,6 @@ use const STR_PAD_LEFT;
 
 final class HexColor implements Stringable
 {
-    /**
-     * @readonly
-     */
     private string $hexString;
 
     /**
@@ -166,6 +163,14 @@ final class HexColor implements Stringable
     }
 
     /**
+     * Get the string representation of the HexColor.
+     */
+    public function __toString() : string
+    {
+        return $this->getHexString();
+    }
+
+    /**
      * Convert to HslColor.
      */
     public function toHsl() : HslColor
@@ -187,13 +192,5 @@ final class HexColor implements Stringable
     public function toCmyk() : CmykColor
     {
         return CmykColor::fromHexColor($this);
-    }
-
-    /**
-     * Get the string representation of the HexColor.
-     */
-    public function __toString() : string
-    {
-        return $this->getHexString();
     }
 }
