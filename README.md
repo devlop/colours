@@ -40,12 +40,12 @@ $hexColor = HexColor::fromRgbColor($rgbColorInstance);
 $hexColor = HexColor::fromCmykColor($cmykColorInstance);
 
 // get the hex string
-$hexColor->getHexString();
+$hexColor->getHexString(); // string('#ff00ff')
 
 // converting to other formats
-$hslColor = $rgbColor->toHsl();
-$rgbColor = $rgbColor->toRgb();
-$cmykColor = $rgbColor->toCmyk();
+$hslColor = $hexColor->toHsl();
+$rgbColor = $hexColor->toRgb();
+$cmykColor = $hexColor->toCmyk();
 ```
 
 ## HslColor
@@ -67,8 +67,8 @@ $hslColor->getSaturation(); // int(96)
 $hslColor->getLightness(); // int(77)
 
 // converting to other formats
-$hexColor = $rgbColor->toHex();
-$rgbColor = $rgbColor->toRgb();
+$hexColor = $hslColor->toHex();
+$rgbColor = $hslColor->toRgb();
 ```
 
 ## RgbColor
@@ -83,7 +83,7 @@ $rgbColor = new RgbColor(221, 186, 146);
 $rgbColor = RgbColor::fromHexString('#f3840c');
 $rgbColor = RgbColor::fromHexColor($hexColorInstance);
 $rgbColor = RgbColor::fromHslColor($hslColorInstance);
-$cmykColor = RgbColor::fromCmykColor($cmykColorInstance);
+$rgbColor = RgbColor::fromCmykColor($cmykColorInstance);
 
 // get RGB properties
 $rgbColor->getRed(); // int(221)
@@ -102,7 +102,7 @@ $cmykColor = $rgbColor->toCmyk();
 use Devlop\Colours\CmykColor;
 
 // creating from CMYK values
-$rgbColor = new CmykColor(20, 80, 65, 34);
+$cmykColor = new CmykColor(20, 80, 65, 34);
 
 // creating from other formats
 $cmykColor = CmykColor::fromHexString('#f3840c');
