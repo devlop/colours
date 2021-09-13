@@ -40,7 +40,6 @@ $hexColor = HexColor::fromRgbColor($rgbColorInstance);
 $hexColor = HexColor::fromCmykColor($cmykColorInstance);
 
 // get the hex string
-(string) $hexColor;
 $hexColor->getHexString();
 
 // converting to other formats
