@@ -29,7 +29,7 @@ HexColor::isValid('red'); // bool(false)
 HexColor::isValid('19b9cd'); // bool(true)
 
 // check validity (strict mode)
-HexColor::isValid('19b9cd'); // bool(false)
+HexColor::isValid('19b9cd', true); // bool(false)
 
 // creating from hex string
 $hexColor = new HexColor('#f0f');
