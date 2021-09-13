@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Devlop\Colours;
 
+use Devlop\Colours\HexColor;
 use Devlop\Colours\InvalidColorException;
 use Devlop\Colours\RgbColor;
 
@@ -82,7 +83,7 @@ final class HslColor
     }
 
     /**
-     * Create a new instance from a RGB values.
+     * Create a new instance from RGB values.
      *
      * @param  int|float  $r
      * @param  int|float  $b

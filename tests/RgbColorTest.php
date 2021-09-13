@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Devlop\Colours\Tests;
 
+use Devlop\Colours\CmykColor;
 use Devlop\Colours\HexColor;
 use Devlop\Colours\HslColor;
 use Devlop\Colours\InvalidColorException;
@@ -232,6 +233,91 @@ final class RgbColorTest extends TestCase
         $this->assertSame($expectedBlue, $rgbColor->getBlue());
     }
 
+    /**
+     * @test
+     * @group cmyk
+     */
+    public function it_can_be_created_from_a_CmykColor_instance() : void
+    {
+        $cmykColor = new CmykColor(58, 24, 48, 31);
+
+        $this->assertInstanceOf(
+            RgbColor::class,
+            RgbColor::fromCmykColor($cmykColor),
+        );
+    }
+
+    /**
+     * @test
+     * @group cmyk
+     * @dataProvider cmykValuesAndExpectedRgbValuesProvider
+     */
+    public function it_has_expected_values_when_created_from_a_CmykColor_instance(
+        int $cyan,
+        int $magenta,
+        int $yellow,
+        int $key,
+        int $expectedRed,
+        int $expectedGreen,
+        int $expectedBlue
+    ) : void {
+        $rgbColor = RgbColor::fromCmykColor(
+            new CmykColor($cyan, $magenta, $yellow, $key),
+        );
+
+        $this->assertSame($expectedRed, $rgbColor->getRed());
+        $this->assertSame($expectedGreen, $rgbColor->getGreen());
+        $this->assertSame($expectedBlue, $rgbColor->getBlue());
+    }
+
+    /**
+     * @test
+     * @group cmyk
+     */
+    public function it_converts_to_CmykColor() : void
+    {
+        $this->assertInstanceOf(
+            CmykColor::class,
+            (new RgbColor(60, 120, 180))->toCmyk(),
+        );
+    }
+
+    /**
+     * @test
+     * @group cmyk
+     */
+    public function getCyan_returns_cmyk_cyan() : void
+    {
+        $this->assertSame(25, (new RgbColor(127, 169, 119))->getCyan());
+    }
+
+    /**
+     * @test
+     * @group cmyk
+     */
+    public function getMagenta_returns_cmyk_magenta() : void
+    {
+        $this->assertSame(0, (new RgbColor(127, 169, 119))->getMagenta());
+    }
+
+    /**
+     * @test
+     * @group cmyk
+     */
+    public function getYellow_returns_cmyk_yellow() : void
+    {
+        $this->assertSame(30, (new RgbColor(127, 169, 119))->getYellow());
+    }
+
+    /**
+     * @test
+     * @group cmyk
+     */
+    public function getKey_returns_cmyk_key() : void
+    {
+        $this->assertSame(34, (new RgbColor(127, 169, 119))->getKey());
+    }
+
     public function validRgbValuesProvider() : array
     {
         return [
@@ -292,6 +378,18 @@ final class RgbColorTest extends TestCase
             [336, 73, 49, 216, 34, 107],
             [69, 50, 78, 219, 227, 171],
             [159, 33, 34, 58, 115, 95],
+        ];
+    }
+
+    public function cmykValuesAndExpectedRgbValuesProvider() : array
+    {
+        return [
+            [0, 0, 0, 0, 255, 255, 255],
+            [100, 100, 100, 100, 0, 0, 0],
+            [50, 50, 50, 50, 64, 64, 64],
+            [25, 62, 40, 65, 67, 34, 54],
+            [0, 62, 40, 86, 36, 14, 21],
+            [100, 62, 40, 55, 0, 44, 69],
         ];
     }
 }
