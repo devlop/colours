@@ -86,6 +86,7 @@ final class RgbColorTest extends TestCase
     ) : void {
         $rgbColor = RgbColor::fromHexString($hexString);
 
+        $this->assertInstanceOf(RgbColor::class, $rgbColor);
         $this->assertSame($expectedRed, $rgbColor->getRed());
         $this->assertSame($expectedGreen, $rgbColor->getGreen());
         $this->assertSame($expectedBlue, $rgbColor->getBlue());
@@ -106,6 +107,7 @@ final class RgbColorTest extends TestCase
             new HexColor($hexString),
         );
 
+        $this->assertInstanceOf(RgbColor::class, $rgbColor);
         $this->assertSame($expectedRed, $rgbColor->getRed());
         $this->assertSame($expectedGreen, $rgbColor->getGreen());
         $this->assertSame($expectedBlue, $rgbColor->getBlue());
@@ -128,6 +130,7 @@ final class RgbColorTest extends TestCase
             new HslColor($hue, $saturation, $lightness),
         );
 
+        $this->assertInstanceOf(RgbColor::class, $rgbColor);
         $this->assertSame($expectedRed, $rgbColor->getRed());
         $this->assertSame($expectedGreen, $rgbColor->getGreen());
         $this->assertSame($expectedBlue, $rgbColor->getBlue());
@@ -151,6 +154,7 @@ final class RgbColorTest extends TestCase
             new CmykColor($cyan, $magenta, $yellow, $key),
         );
 
+        $this->assertInstanceOf(RgbColor::class, $rgbColor);
         $this->assertSame($expectedRed, $rgbColor->getRed());
         $this->assertSame($expectedGreen, $rgbColor->getGreen());
         $this->assertSame($expectedBlue, $rgbColor->getBlue());

@@ -118,9 +118,12 @@ final class HexColorTest extends TestCase
         int $lightness,
         string $expectedHexString
     ) : void {
-        $hslColor = new HslColor($hue, $saturation, $lightness);
+        $hexColor = HexColor::fromHslColor(
+            new HslColor($hue, $saturation, $lightness),
+        );
 
-        $this->assertSame($expectedHexString, (string) HexColor::fromHslColor($hslColor));
+        $this->assertInstanceOf(HexColor::class, $hexColor);
+        $this->assertSame($expectedHexString, $hexColor->getHexString());
     }
 
     /**
@@ -134,9 +137,12 @@ final class HexColorTest extends TestCase
         int $b,
         string $expectedHexString
     ) : void {
-        $rgbColor = new RgbColor($r, $g, $b);
+        $hexColor = HexColor::fromRgbColor(
+            new RgbColor($r, $g, $b),
+        );
 
-        $this->assertSame($expectedHexString, (string) HexColor::fromRgbColor($rgbColor));
+        $this->assertInstanceOf(HexColor::class, $hexColor);
+        $this->assertSame($expectedHexString, $hexColor->getHexString());
     }
 
     /**

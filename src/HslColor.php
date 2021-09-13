@@ -157,36 +157,4 @@ final class HslColor
     {
         return RgbColor::fromHslColor($this);
     }
-
-    /**
-     * Get the RGB red.
-     */
-    public function getRed() : int
-    {
-        return $this->toRgb()->getRed();
-    }
-
-    /**
-     * Get the RGB green.
-     */
-    public function getGreen() : int
-    {
-        return $this->toRgb()->getGreen();
-    }
-
-    /**
-     * Get the RGB blue.
-     */
-    public function getBlue() : int
-    {
-        return $this->toRgb()->getBlue();
-    }
-
-    /**
-     * Get the hex string.
-     */
-    public function getHexString() : string
-    {
-        return $this->toHex()->getHexString();
-    }
 }

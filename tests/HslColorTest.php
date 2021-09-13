@@ -14,6 +14,9 @@ use ReflectionClass;
 use Stringable;
 use Throwable;
 
+/**
+ * @group hsl
+ */
 final class HslColorTest extends TestCase
 {
     use ExceptionAssertions;
@@ -38,39 +41,6 @@ final class HslColorTest extends TestCase
     {
         $this->assertExceptionThrown(InvalidColorException::class, function () use ($hue, $saturation, $lightness) : void {
             new HslColor($hue, $saturation, $lightness);
-        });
-    }
-
-    /**
-     * @test
-     * @dataProvider invalidSaturationProvider
-     */
-    public function it_cannot_be_created_with_invalid_saturation(int $hue, int $saturation, int $lightness) : void
-    {
-        $this->assertExceptionThrown(InvalidColorException::class, function () use ($hue, $saturation, $lightness) : void {
-            new HslColor($hue, $saturation, $lightness);
-        });
-    }
-
-    /**
-     * @test
-     * @dataProvider invalidLightnessProvider
-     */
-    public function it_cannot_be_created_with_invalid_lightness(int $hue, int $saturation, int $lightness) : void
-    {
-        $this->assertExceptionThrown(InvalidColorException::class, function () use ($hue, $saturation, $lightness) : void {
-            new HslColor($hue, $saturation, $lightness);
-        });
-    }
-
-    /**
-     * @test
-     * @dataProvider invalidHueProvider
-     */
-    public function when_created_with_invalid_hue_the_exception_message_contains_the_invalid_value(int $hue, int $saturation, int $lightness) : void
-    {
-        $this->assertExceptionThrown(InvalidColorException::class, function () use ($hue, $saturation, $lightness) : void {
-            new HslColor($hue, $saturation, $lightness);
         }, function (InvalidColorException $exception) use ($hue) : void {
             $this->assertStringContainsString("\"{$hue}\"", $exception->getMessage());
         });
@@ -80,7 +50,7 @@ final class HslColorTest extends TestCase
      * @test
      * @dataProvider invalidSaturationProvider
      */
-    public function when_created_with_invalid_saturation_the_exception_message_contains_the_invalid_value(int $hue, int $saturation, int $lightness) : void
+    public function it_cannot_be_created_with_invalid_saturation(int $hue, int $saturation, int $lightness) : void
     {
         $this->assertExceptionThrown(InvalidColorException::class, function () use ($hue, $saturation, $lightness) : void {
             new HslColor($hue, $saturation, $lightness);
@@ -93,7 +63,7 @@ final class HslColorTest extends TestCase
      * @test
      * @dataProvider invalidLightnessProvider
      */
-    public function when_created_with_invalid_lightness_the_exception_message_contains_the_invalid_value(int $hue, int $saturation, int $lightness) : void
+    public function it_cannot_be_created_with_invalid_lightness(int $hue, int $saturation, int $lightness) : void
     {
         $this->assertExceptionThrown(InvalidColorException::class, function () use ($hue, $saturation, $lightness) : void {
             new HslColor($hue, $saturation, $lightness);
@@ -102,49 +72,12 @@ final class HslColorTest extends TestCase
         });
     }
 
-    /** @test */
-    public function getHue_returns_hue() : void
-    {
-        $this->assertSame(31, (new HslColor(31, 97, 72))->getHue());
-    }
-
-    /** @test */
-    public function getSaturation_returns_saturation() : void
-    {
-        $this->assertSame(97, (new HslColor(31, 97, 72))->getSaturation());
-    }
-
-    /** @test */
-    public function getLightness_returns_lightness() : void
-    {
-        $this->assertSame(72, (new HslColor(31, 97, 72))->getLightness());
-    }
-
-    /** @test */
-    public function it_can_be_created_from_a_hex_string() : void
-    {
-        $this->assertInstanceOf(
-            HslColor::class,
-            HslColor::fromHexString('#ddffdd'),
-        );
-    }
-
-    /** @test */
-    public function it_can_be_created_from_a_HexColor_instance() : void
-    {
-        $hexColor = new HexColor('#ddffdd');
-
-        $this->assertInstanceOf(
-            HslColor::class,
-            HslColor::fromHexColor($hexColor),
-        );
-    }
-
     /**
      * @test
+     * @group hex
      * @dataProvider hexStringAndExpectedHslValuesProvider
      */
-    public function it_has_expected_values_when_created_from_a_hex_string(
+    public function it_can_be_created_from_a_hexString(
         string $hexString,
         int $expectedHue,
         int $expectedSaturation,
@@ -152,42 +85,39 @@ final class HslColorTest extends TestCase
     ) : void {
         $hslColor = HslColor::fromHexString($hexString);
 
+        $this->assertInstanceOf(HslColor::class, $hslColor);
         $this->assertSame($expectedHue, $hslColor->getHue());
         $this->assertSame($expectedSaturation, $hslColor->getSaturation());
         $this->assertSame($expectedLightness, $hslColor->getLightness());
     }
 
-    /** @test */
-    public function it_converts_to_HexColor() : void
-    {
-        $this->assertInstanceOf(
-            HexColor::class,
-            (new HslColor(0, 94, 82))->toHex(),
+    /**
+     * @test
+     * @group hex
+     * @dataProvider hexStringAndExpectedHslValuesProvider
+     */
+    public function it_can_be_created_from_a_HexColor_instance(
+        string $hexString,
+        int $expectedHue,
+        int $expectedSaturation,
+        int $expectedLightness
+    ) : void {
+        $hslColor = HslColor::fromHexColor(
+            new HexColor($hexString),
         );
-    }
 
-    /** @test */
-    public function getHexString_returns_hex_hexString() : void
-    {
-        $this->assertSame('#f97415', (new HslColor(25, 95, 53))->getHexString());
-    }
-
-    /** @test */
-    public function it_can_be_created_from_a_RgbColor_instance() : void
-    {
-        $rgbColor = new RgbColor(60, 120, 180);
-
-        $this->assertInstanceOf(
-            HslColor::class,
-            HslColor::fromRgbColor($rgbColor),
-        );
+        $this->assertInstanceOf(HslColor::class, $hslColor);
+        $this->assertSame($expectedHue, $hslColor->getHue());
+        $this->assertSame($expectedSaturation, $hslColor->getSaturation());
+        $this->assertSame($expectedLightness, $hslColor->getLightness());
     }
 
     /**
      * @test
+     * @group rgb
      * @dataProvider rgbValuesAndExpectedHslValuesProvider
      */
-    public function it_has_expected_values_when_created_from_a_RgbColor_instance(
+    public function it_can_be_created_from_a_RgbColor_instance(
         int $r,
         int $g,
         int $b,
@@ -199,36 +129,63 @@ final class HslColorTest extends TestCase
             new RgbColor($r, $g, $b),
         );
 
+        $this->assertInstanceOf(HslColor::class, $hslColor);
         $this->assertSame($expectedHue, $hslColor->getHue());
         $this->assertSame($expectedSaturation, $hslColor->getSaturation());
         $this->assertSame($expectedLightness, $hslColor->getLightness());
     }
 
-    /** @test */
-    public function it_converts_to_RgbColor() : void
+    /**
+     * @test
+     * @dataProvider validHslValuesProvider
+     */
+    public function getHue_returns_hue(int $hue, int $saturation, int $lightness) : void
+    {
+        $this->assertSame($hue, (new HslColor($hue, $saturation, $lightness))->getHue());
+    }
+
+    /**
+     * @test
+     * @dataProvider validHslValuesProvider
+     */
+    public function getSaturation_returns_saturation(int $hue, int $saturation, int $lightness) : void
+    {
+        $this->assertSame($saturation, (new HslColor($hue, $saturation, $lightness))->getSaturation());
+    }
+
+    /**
+     * @test
+     * @dataProvider validHslValuesProvider
+     */
+    public function getLightness_returns_lightness(int $hue, int $saturation, int $lightness) : void
+    {
+        $this->assertSame($lightness, (new HslColor($hue, $saturation, $lightness))->getLightness());
+    }
+
+    /**
+     * @test
+     * @group rgb
+     * @dataProvider validHslValuesProvider
+     */
+    public function it_converts_to_HexColor(int $hue, int $saturation, int $lightness) : void
     {
         $this->assertInstanceOf(
-            RgbColor::class,
-            (new HslColor(82, 32, 52))->toRgb(),
+            HexColor::class,
+            (new HslColor($hue, $saturation, $lightness))->toHex(),
         );
     }
 
-    /** @test */
-    public function getRed_returns_rgb_red() : void
+    /**
+     * @test
+     * @group rgb
+     * @dataProvider validHslValuesProvider
+     */
+    public function it_converts_to_RgbColor(int $hue, int $saturation, int $lightness) : void
     {
-        $this->assertSame(73, (new HslColor(143, 36, 45))->getRed());
-    }
-
-    /** @test */
-    public function getGreen_returns_rgb_green() : void
-    {
-        $this->assertSame(156, (new HslColor(143, 36, 45))->getGreen());
-    }
-
-    /** @test */
-    public function getBlue_returns_rgb_blue() : void
-    {
-        $this->assertSame(105, (new HslColor(143, 36, 45))->getBlue());
+        $this->assertInstanceOf(
+            RgbColor::class,
+            (new HslColor($hue, $saturation, $lightness))->toRgb(),
+        );
     }
 
     public function validHslValuesProvider() : array
