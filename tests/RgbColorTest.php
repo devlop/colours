@@ -194,9 +194,11 @@ final class RgbColorTest extends TestCase
      */
     public function it_converts_to_HexColor(int $red, int $green, int $blue) : void
     {
+        $rgbColor = new RgbColor($red, $green, $blue);
+
         $this->assertInstanceOf(
             HexColor::class,
-            (new RgbColor($red, $green, $blue))->toHex(),
+            $rgbColor->toHex(),
         );
     }
 
@@ -207,9 +209,11 @@ final class RgbColorTest extends TestCase
      */
     public function it_converts_to_HslColor(int $red, int $green, int $blue) : void
     {
+        $rgbColor = new RgbColor($red, $green, $blue);
+
         $this->assertInstanceOf(
             HslColor::class,
-            (new RgbColor($red, $green, $blue))->toHsl(),
+            $rgbColor->toHsl(),
         );
     }
 
@@ -220,9 +224,11 @@ final class RgbColorTest extends TestCase
      */
     public function it_converts_to_CmykColor(int $red, int $green, int $blue) : void
     {
+        $rgbColor = new RgbColor($red, $green, $blue);
+
         $this->assertInstanceOf(
             CmykColor::class,
-            (new RgbColor($red, $green, $blue))->toCmyk(),
+            $rgbColor->toCmyk(),
         );
     }
 

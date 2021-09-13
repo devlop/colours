@@ -152,4 +152,20 @@ final class CmykColor
     {
         return $this->key;
     }
+
+    /**
+     * Convert to HexColor.
+     */
+    public function toHex() : HexColor
+    {
+        return HexColor::fromCmykColor($this);
+    }
+
+    /**
+     * Convert to RgbColor.
+     */
+    public function toRgb() : RgbColor
+    {
+        return RgbColor::fromCmykColor($this);
+    }
 }

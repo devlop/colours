@@ -38,50 +38,6 @@ final class CmykColorTest extends TestCase
     {
         $this->assertExceptionThrown(InvalidColorException::class, function () use ($cyan, $magenta, $yellow, $key) : void {
             new CmykColor($cyan, $magenta, $yellow, $key);
-        });
-    }
-
-    /**
-     * @test
-     * @dataProvider invalidMagentaProvider
-     */
-    public function it_cannot_be_created_with_invalid_magenta(int $cyan, int $magenta, int $yellow, int $key) : void
-    {
-        $this->assertExceptionThrown(InvalidColorException::class, function () use ($cyan, $magenta, $yellow, $key) : void {
-            new CmykColor($cyan, $magenta, $yellow, $key);
-        });
-    }
-
-    /**
-     * @test
-     * @dataProvider invalidYellowProvider
-     */
-    public function it_cannot_be_created_with_invalid_yellow(int $cyan, int $magenta, int $yellow, int $key) : void
-    {
-        $this->assertExceptionThrown(InvalidColorException::class, function () use ($cyan, $magenta, $yellow, $key) : void {
-            new CmykColor($cyan, $magenta, $yellow, $key);
-        });
-    }
-
-    /**
-     * @test
-     * @dataProvider invalidKeyProvider
-     */
-    public function it_cannot_be_created_with_invalid_key(int $cyan, int $magenta, int $yellow, int $key) : void
-    {
-        $this->assertExceptionThrown(InvalidColorException::class, function () use ($cyan, $magenta, $yellow, $key) : void {
-            new CmykColor($cyan, $magenta, $yellow, $key);
-        });
-    }
-
-    /**
-     * @test
-     * @dataProvider invalidCyanProvider
-     */
-    public function when_created_with_invalid_cyan_the_exception_message_contains_the_invalid_value(int $cyan, int $magenta, int $yellow, int $key) : void
-    {
-        $this->assertExceptionThrown(InvalidColorException::class, function () use ($cyan, $magenta, $yellow, $key) : void {
-            new CmykColor($cyan, $magenta, $yellow, $key);
         }, function (InvalidColorException $exception) use ($cyan) : void {
             $this->assertStringContainsString("\"{$cyan}\"", $exception->getMessage());
         });
@@ -91,7 +47,7 @@ final class CmykColorTest extends TestCase
      * @test
      * @dataProvider invalidMagentaProvider
      */
-    public function when_created_with_invalid_magenta_the_exception_message_contains_the_invalid_value(int $cyan, int $magenta, int $yellow, int $key) : void
+    public function it_cannot_be_created_with_invalid_magenta(int $cyan, int $magenta, int $yellow, int $key) : void
     {
         $this->assertExceptionThrown(InvalidColorException::class, function () use ($cyan, $magenta, $yellow, $key) : void {
             new CmykColor($cyan, $magenta, $yellow, $key);
@@ -104,7 +60,7 @@ final class CmykColorTest extends TestCase
      * @test
      * @dataProvider invalidYellowProvider
      */
-    public function when_created_with_invalid_yellow_the_exception_message_contains_the_invalid_value(int $cyan, int $magenta, int $yellow, int $key) : void
+    public function it_cannot_be_created_with_invalid_yellow(int $cyan, int $magenta, int $yellow, int $key) : void
     {
         $this->assertExceptionThrown(InvalidColorException::class, function () use ($cyan, $magenta, $yellow, $key) : void {
             new CmykColor($cyan, $magenta, $yellow, $key);
@@ -117,13 +73,82 @@ final class CmykColorTest extends TestCase
      * @test
      * @dataProvider invalidKeyProvider
      */
-    public function when_created_with_invalid_key_the_exception_message_contains_the_invalid_value(int $cyan, int $magenta, int $yellow, int $key) : void
+    public function it_cannot_be_created_with_invalid_key(int $cyan, int $magenta, int $yellow, int $key) : void
     {
         $this->assertExceptionThrown(InvalidColorException::class, function () use ($cyan, $magenta, $yellow, $key) : void {
             new CmykColor($cyan, $magenta, $yellow, $key);
         }, function (InvalidColorException $exception) use ($key) : void {
             $this->assertStringContainsString("\"{$key}\"", $exception->getMessage());
         });
+    }
+
+    /**
+     * @test
+     * @group hex
+     * @dataProvider hexStringAndExpectedCmykValuesProvider
+     */
+    public function it_can_be_created_from_a_hexString(
+        string $hexString,
+        int $expectedCyan,
+        int $expectedMagenta,
+        int $expectedYellow,
+        int $expectedKey
+    ) : void {
+        $cmykColor = CmykColor::fromHexString($hexString);
+
+        $this->assertInstanceOf(CmykColor::class, $cmykColor);
+        $this->assertSame($expectedCyan, $cmykColor->getCyan());
+        $this->assertSame($expectedMagenta, $cmykColor->getMagenta());
+        $this->assertSame($expectedYellow, $cmykColor->getYellow());
+        $this->assertSame($expectedKey, $cmykColor->getKey());
+    }
+
+    /**
+     * @test
+     * @group hex
+     * @dataProvider hexStringAndExpectedCmykValuesProvider
+     */
+    public function it_can_be_created_from_a_HexColor_instance(
+        string $hexString,
+        int $expectedCyan,
+        int $expectedMagenta,
+        int $expectedYellow,
+        int $expectedKey
+    ) : void {
+        $cmykColor = CmykColor::fromHexColor(
+            new HexColor($hexString),
+        );
+
+        $this->assertInstanceOf(CmykColor::class, $cmykColor);
+        $this->assertSame($expectedCyan, $cmykColor->getCyan());
+        $this->assertSame($expectedMagenta, $cmykColor->getMagenta());
+        $this->assertSame($expectedYellow, $cmykColor->getYellow());
+        $this->assertSame($expectedKey, $cmykColor->getKey());
+    }
+
+    /**
+     * @test
+     * @group rgb
+     * @dataProvider rgbValuesAndExpectedCmykValuesProvider
+     */
+    public function it_can_be_created_from_a_RgbColor_instance(
+        int $r,
+        int $g,
+        int $b,
+        int $expectedCyan,
+        int $expectedMagenta,
+        int $expectedYellow,
+        int $expectedKey
+    ) : void {
+        $cmykColor = CmykColor::fromRgbColor(
+            new RgbColor($r, $g, $b),
+        );
+
+        $this->assertInstanceOf(CmykColor::class, $cmykColor);
+        $this->assertSame($expectedCyan, $cmykColor->getCyan());
+        $this->assertSame($expectedMagenta, $cmykColor->getMagenta());
+        $this->assertSame($expectedYellow, $cmykColor->getYellow());
+        $this->assertSame($expectedKey, $cmykColor->getKey());
     }
 
     /**
@@ -164,65 +189,32 @@ final class CmykColorTest extends TestCase
 
     /**
      * @test
-     * @dataProvider rgbValuesAndExpectedCmykValuesProvider
+     * @group hex
+     * @dataProvider validCmykValuesProvider
      */
-    public function it_has_expected_values_when_created_from_a_RgbColor_instance(
-        int $r,
-        int $g,
-        int $b,
-        int $expectedCyan,
-        int $expectedMagenta,
-        int $expectedYellow,
-        int $expectedKey
-    ) : void {
-        $cmykColor = CmykColor::fromRgbColor(
-            new RgbColor($r, $g, $b),
-        );
+    public function it_converts_to_HexColor(int $cyan, int $magenta, int $yellow, int $key) : void
+    {
+        $cmykColor = new CmykColor($cyan, $magenta, $yellow, $key);
 
-        $this->assertSame($expectedCyan, $cmykColor->getCyan());
-        $this->assertSame($expectedMagenta, $cmykColor->getMagenta());
-        $this->assertSame($expectedYellow, $cmykColor->getYellow());
-        $this->assertSame($expectedKey, $cmykColor->getKey());
+        $this->assertInstanceOf(
+            HexColor::class,
+            $cmykColor->toHex(),
+        );
     }
 
     /**
      * @test
-     * @dataProvider hexStringAndExpectedCmykValuesProvider
+     * @group rgb
+     * @dataProvider validCmykValuesProvider
      */
-    public function it_has_expected_values_when_created_from_a_hex_string(
-        string $hexString,
-        int $expectedCyan,
-        int $expectedMagenta,
-        int $expectedYellow,
-        int $expectedKey
-    ) : void {
-        $cmykColor = CmykColor::fromHexString($hexString);
+    public function it_converts_to_RgbColor(int $cyan, int $magenta, int $yellow, int $key) : void
+    {
+        $cmykColor = new CmykColor($cyan, $magenta, $yellow, $key);
 
-        $this->assertSame($expectedCyan, $cmykColor->getCyan());
-        $this->assertSame($expectedMagenta, $cmykColor->getMagenta());
-        $this->assertSame($expectedYellow, $cmykColor->getYellow());
-        $this->assertSame($expectedKey, $cmykColor->getKey());
-    }
-
-    /**
-     * @test
-     * @dataProvider hexStringAndExpectedCmykValuesProvider
-     */
-    public function it_has_expected_values_when_created_from_a_HexColor_instance(
-        string $hexString,
-        int $expectedCyan,
-        int $expectedMagenta,
-        int $expectedYellow,
-        int $expectedKey
-    ) : void {
-        $cmykColor = CmykColor::fromHexColor(
-            new HexColor($hexString),
+        $this->assertInstanceOf(
+            RgbColor::class,
+            $cmykColor->toRgb(),
         );
-
-        $this->assertSame($expectedCyan, $cmykColor->getCyan());
-        $this->assertSame($expectedMagenta, $cmykColor->getMagenta());
-        $this->assertSame($expectedYellow, $cmykColor->getYellow());
-        $this->assertSame($expectedKey, $cmykColor->getKey());
     }
 
     public function validCmykValuesProvider() : array

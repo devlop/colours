@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Devlop\Colours;
 
+use Devlop\Colours\CmykColor;
 use Devlop\Colours\InvalidColorException;
 use InvalidArgumentException;
 use Stringable;
-
 use const STR_PAD_LEFT;
 
 final class HexColor implements Stringable
@@ -99,6 +99,28 @@ final class HexColor implements Stringable
         $r = base_convert($rgbColor->getRed(), 10, 16);
         $g = base_convert($rgbColor->getGreen(), 10, 16);
         $b = base_convert($rgbColor->getBlue(), 10, 16);
+
+        return new static(implode('', [
+            '#',
+            str_pad($r, 2, '0', STR_PAD_LEFT),
+            str_pad($g, 2, '0', STR_PAD_LEFT),
+            str_pad($b, 2, '0', STR_PAD_LEFT),
+        ]));
+    }
+
+    /**
+     * Create a new instance from a CmykColor instance.
+     */
+    public static function fromCmykColor(CmykColor $cmykColor) : HexColor
+    {
+        $cyan = $cmykColor->getCyan() / 100;
+        $magenta = $cmykColor->getMagenta() / 100;
+        $yellow = $cmykColor->getYellow() / 100;
+        $key = $cmykColor->getKey() / 100;
+
+        $r = base_convert(round(255 * (1 - $cyan) * (1 - $key)), 10, 16);
+        $g = base_convert(round(255 * (1 - $magenta) * (1 - $key)), 10, 16);
+        $b = base_convert(round(255 * (1 - $yellow) * (1 - $key)), 10, 16);
 
         return new static(implode('', [
             '#',

@@ -147,6 +147,26 @@ final class HexColorTest extends TestCase
 
     /**
      * @test
+     * @group cmyk
+     * @dataProvider cmykValuesAndExpectedHexStringProvider
+     */
+    public function it_can_be_created_from_a_CmykColor_instance(
+        int $cyan,
+        int $magenta,
+        int $yellow,
+        int $key,
+        string $expectedHexString
+    ) : void {
+        $hexColor = HexColor::fromCmykColor(
+            new CmykColor($cyan, $magenta, $yellow, $key),
+        );
+
+        $this->assertInstanceOf(HexColor::class, $hexColor);
+        $this->assertSame($expectedHexString, $hexColor->getHexString());
+    }
+
+    /**
+     * @test
      * @dataProvider validLongHexStringProvider
      */
     public function isValid_returns_true_for_valid_long_hexStrings(string $hexString) : void
@@ -247,9 +267,11 @@ final class HexColorTest extends TestCase
      */
     public function it_converts_to_HslColor(string $hexString) : void
     {
+        $hexColor = new HexColor($hexString);
+
         $this->assertInstanceOf(
             HslColor::class,
-            (new HexColor($hexString))->toHsl(),
+            $hexColor->toHsl(),
         );
     }
 
@@ -261,9 +283,11 @@ final class HexColorTest extends TestCase
      */
     public function it_converts_to_RgbColor(string $hexString) : void
     {
+        $hexColor = new HexColor($hexString);
+
         $this->assertInstanceOf(
             RgbColor::class,
-            (new HexColor($hexString))->toRgb(),
+            $hexColor->toRgb(),
         );
     }
 
@@ -275,9 +299,11 @@ final class HexColorTest extends TestCase
      */
     public function it_converts_to_CmykColor(string $hexString) : void
     {
+        $hexColor = new HexColor($hexString);
+
         $this->assertInstanceOf(
             CmykColor::class,
-            (new HexColor($hexString))->toCmyk(),
+            $hexColor->toCmyk(),
         );
     }
 
@@ -366,6 +392,16 @@ final class HexColorTest extends TestCase
         return [
             [22, 163, 74, '#16a34a'],
             [103, 232, 249, '#67e8f9'],
+        ];
+    }
+
+    public function cmykValuesAndExpectedHexStringProvider() : array
+    {
+        return [
+            [0, 0, 0, 100, '#000000'],
+            [0, 0, 0, 0, '#ffffff'],
+            [50, 50, 50, 50, '#404040'],
+            [20, 80, 65, 34, '#87223b'],
         ];
     }
 }

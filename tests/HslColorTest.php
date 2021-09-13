@@ -169,9 +169,11 @@ final class HslColorTest extends TestCase
      */
     public function it_converts_to_HexColor(int $hue, int $saturation, int $lightness) : void
     {
+        $hslColor = new HslColor($hue, $saturation, $lightness);
+
         $this->assertInstanceOf(
             HexColor::class,
-            (new HslColor($hue, $saturation, $lightness))->toHex(),
+            $hslColor->toHex(),
         );
     }
 
@@ -182,9 +184,11 @@ final class HslColorTest extends TestCase
      */
     public function it_converts_to_RgbColor(int $hue, int $saturation, int $lightness) : void
     {
+        $hslColor = new HslColor($hue, $saturation, $lightness);
+
         $this->assertInstanceOf(
             RgbColor::class,
-            (new HslColor($hue, $saturation, $lightness))->toRgb(),
+            $hslColor->toRgb(),
         );
     }
 
