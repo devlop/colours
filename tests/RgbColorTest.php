@@ -15,6 +15,9 @@ use ReflectionClass;
 use Stringable;
 use Throwable;
 
+/**
+ * @group rgb
+ */
 final class RgbColorTest extends TestCase
 {
     use ExceptionAssertions;
@@ -39,39 +42,6 @@ final class RgbColorTest extends TestCase
     {
         $this->assertExceptionThrown(InvalidColorException::class, function () use ($red, $green, $blue) : void {
             new RgbColor($red, $green, $blue);
-        });
-    }
-
-    /**
-     * @test
-     * @dataProvider invalidGreenProvider
-     */
-    public function it_cannot_be_created_with_invalid_green(int $red, int $green, int $blue) : void
-    {
-        $this->assertExceptionThrown(InvalidColorException::class, function () use ($red, $green, $blue) : void {
-            new RgbColor($red, $green, $blue);
-        });
-    }
-
-    /**
-     * @test
-     * @dataProvider invalidBlueProvider
-     */
-    public function it_cannot_be_created_with_invalid_blue(int $red, int $green, int $blue) : void
-    {
-        $this->assertExceptionThrown(InvalidColorException::class, function () use ($red, $green, $blue) : void {
-            new RgbColor($red, $green, $blue);
-        });
-    }
-
-    /**
-     * @test
-     * @dataProvider invalidRedProvider
-     */
-    public function when_created_with_invalid_red_the_exception_message_contains_the_invalid_value(int $red, int $green, int $blue) : void
-    {
-        $this->assertExceptionThrown(InvalidColorException::class, function () use ($red, $green, $blue) : void {
-            new RgbColor($red, $green, $blue);
         }, function (InvalidColorException $exception) use ($red) : void {
             $this->assertStringContainsString("\"{$red}\"", $exception->getMessage());
         });
@@ -81,7 +51,7 @@ final class RgbColorTest extends TestCase
      * @test
      * @dataProvider invalidGreenProvider
      */
-    public function when_created_with_invalid_blue_the_exception_message_contains_the_invalid_value(int $red, int $green, int $blue) : void
+    public function it_cannot_be_created_with_invalid_green(int $red, int $green, int $blue) : void
     {
         $this->assertExceptionThrown(InvalidColorException::class, function () use ($red, $green, $blue) : void {
             new RgbColor($red, $green, $blue);
@@ -94,7 +64,7 @@ final class RgbColorTest extends TestCase
      * @test
      * @dataProvider invalidBlueProvider
      */
-    public function when_created_with_invalid_green_the_exception_message_contains_the_invalid_value(int $red, int $green, int $blue) : void
+    public function it_cannot_be_created_with_invalid_blue(int $red, int $green, int $blue) : void
     {
         $this->assertExceptionThrown(InvalidColorException::class, function () use ($red, $green, $blue) : void {
             new RgbColor($red, $green, $blue);
@@ -103,91 +73,12 @@ final class RgbColorTest extends TestCase
         });
     }
 
-    /** @test */
-    public function getRed_returns_red() : void
-    {
-        $this->assertSame(60, (new RgbColor(60, 120, 180))->getRed());
-    }
-
-    /** @test */
-    public function getGreen_returns_green() : void
-    {
-        $this->assertSame(120, (new RgbColor(60, 120, 180))->getGreen());
-    }
-
-    /** @test */
-    public function getBlue_returns_blue() : void
-    {
-        $this->assertSame(180, (new RgbColor(60, 120, 180))->getBlue());
-    }
-
-    /** @test */
-    public function it_converts_to_HslColor() : void
-    {
-        $this->assertInstanceOf(
-            HslColor::class,
-            (new RgbColor(60, 120, 180))->toHsl(),
-        );
-    }
-
-    /** @test */
-    public function getHue_returns_hsl_hue() : void
-    {
-        $this->assertSame(142, (new RgbColor(22, 163, 74))->getHue());
-    }
-
-    /** @test */
-    public function getSaturation_returns_hsl_saturation() : void
-    {
-        $this->assertSame(76, (new RgbColor(22, 163, 74))->getSaturation());
-    }
-
-    /** @test */
-    public function getLightness_returns_hsl_lightness() : void
-    {
-        $this->assertSame(36, (new RgbColor(22, 163, 74))->getLightness());
-    }
-
-    /** @test */
-    public function it_converts_to_HexColor() : void
-    {
-        $this->assertInstanceOf(
-            HexColor::class,
-            (new RgbColor(126, 65, 143))->toHex(),
-        );
-    }
-
-    /** @test */
-    public function getHexString_returns_hex_hexString() : void
-    {
-        $this->assertSame('#7e418f', (new RgbColor(126, 65, 143))->getHexString());
-    }
-
-    /** @test */
-    public function it_can_be_created_from_a_hex_string() : void
-    {
-        $this->assertInstanceOf(
-            RgbColor::class,
-            RgbColor::fromHexString('#fe02dc'),
-        );
-    }
-
-    /** @test */
-    public function it_can_be_created_from_a_HexColor_instance() : void
-    {
-        $hexColor = new HexColor('#790370');
-
-        $this->assertInstanceOf(
-            RgbColor::class,
-            RgbColor::fromHexColor($hexColor),
-        );
-    }
-
     /**
      * @test
+     * @group hex
      * @dataProvider hexStringAndExpectedRgbValuesProvider
      */
-    public function it_has_expected_rgb_values_when_created_from_a_hex_string(
+    public function it_can_be_created_from_a_hex_string(
         string $hexString,
         int $expectedRed,
         int $expectedGreen,
@@ -200,23 +91,32 @@ final class RgbColorTest extends TestCase
         $this->assertSame($expectedBlue, $rgbColor->getBlue());
     }
 
-    /** @test */
-    public function it_can_be_created_from_a_HslColor_instance() : void
-    {
-        // #74D928
-        $hslColor = new HslColor(94, 70, 50);
-
-        $this->assertInstanceOf(
-            RgbColor::class,
-            RgbColor::fromHslColor($hslColor),
+    /**
+     * @test
+     * @group hex
+     * @dataProvider hexStringAndExpectedRgbValuesProvider
+     */
+    public function it_can_be_created_from_a_HexColor_instance(
+        string $hexString,
+        int $expectedRed,
+        int $expectedGreen,
+        int $expectedBlue
+    ) : void {
+        $rgbColor = RgbColor::fromHexColor(
+            new HexColor($hexString),
         );
+
+        $this->assertSame($expectedRed, $rgbColor->getRed());
+        $this->assertSame($expectedGreen, $rgbColor->getGreen());
+        $this->assertSame($expectedBlue, $rgbColor->getBlue());
     }
 
     /**
      * @test
+     * @group hsl
      * @dataProvider hslValuesAndExpectedRgbValuesProvider
      */
-    public function it_has_expected_values_when_created_from_a_HslColor_instance(
+    public function it_can_be_created_from_a_HslColor_instance(
         int $hue,
         int $saturation,
         int $lightness,
@@ -236,23 +136,9 @@ final class RgbColorTest extends TestCase
     /**
      * @test
      * @group cmyk
-     */
-    public function it_can_be_created_from_a_CmykColor_instance() : void
-    {
-        $cmykColor = new CmykColor(58, 24, 48, 31);
-
-        $this->assertInstanceOf(
-            RgbColor::class,
-            RgbColor::fromCmykColor($cmykColor),
-        );
-    }
-
-    /**
-     * @test
-     * @group cmyk
      * @dataProvider cmykValuesAndExpectedRgbValuesProvider
      */
-    public function it_has_expected_values_when_created_from_a_CmykColor_instance(
+    public function it_can_be_created_from_a_CmykColor_instance(
         int $cyan,
         int $magenta,
         int $yellow,
@@ -272,50 +158,68 @@ final class RgbColorTest extends TestCase
 
     /**
      * @test
-     * @group cmyk
+     * @dataProvider validRgbValuesProvider
      */
-    public function it_converts_to_CmykColor() : void
+    public function getRed_returns_red(int $red, int $green, int $blue) : void
+    {
+        $this->assertSame($red, (new RgbColor($red, $green, $blue))->getRed());
+    }
+
+    /**
+     * @test
+     * @dataProvider validRgbValuesProvider
+     */
+    public function getGreen_returns_green(int $red, int $green, int $blue) : void
+    {
+        $this->assertSame($green, (new RgbColor($red, $green, $blue))->getGreen());
+    }
+
+    /**
+     * @test
+     * @dataProvider validRgbValuesProvider
+     */
+    public function getBlue_returns_blue(int $red, int $green, int $blue) : void
+    {
+        $this->assertSame($blue, (new RgbColor($red, $green, $blue))->getBlue());
+    }
+
+    /**
+     * @test
+     * @group hex
+     * @dataProvider validRgbValuesProvider
+     */
+    public function it_converts_to_HexColor(int $red, int $green, int $blue) : void
     {
         $this->assertInstanceOf(
-            CmykColor::class,
-            (new RgbColor(60, 120, 180))->toCmyk(),
+            HexColor::class,
+            (new RgbColor($red, $green, $blue))->toHex(),
+        );
+    }
+
+    /**
+     * @test
+     * @group hsl
+     * @dataProvider validRgbValuesProvider
+     */
+    public function it_converts_to_HslColor(int $red, int $green, int $blue) : void
+    {
+        $this->assertInstanceOf(
+            HslColor::class,
+            (new RgbColor($red, $green, $blue))->toHsl(),
         );
     }
 
     /**
      * @test
      * @group cmyk
+     * @dataProvider validRgbValuesProvider
      */
-    public function getCyan_returns_cmyk_cyan() : void
+    public function it_converts_to_CmykColor(int $red, int $green, int $blue) : void
     {
-        $this->assertSame(25, (new RgbColor(127, 169, 119))->getCyan());
-    }
-
-    /**
-     * @test
-     * @group cmyk
-     */
-    public function getMagenta_returns_cmyk_magenta() : void
-    {
-        $this->assertSame(0, (new RgbColor(127, 169, 119))->getMagenta());
-    }
-
-    /**
-     * @test
-     * @group cmyk
-     */
-    public function getYellow_returns_cmyk_yellow() : void
-    {
-        $this->assertSame(30, (new RgbColor(127, 169, 119))->getYellow());
-    }
-
-    /**
-     * @test
-     * @group cmyk
-     */
-    public function getKey_returns_cmyk_key() : void
-    {
-        $this->assertSame(34, (new RgbColor(127, 169, 119))->getKey());
+        $this->assertInstanceOf(
+            CmykColor::class,
+            (new RgbColor($red, $green, $blue))->toCmyk(),
+        );
     }
 
     public function validRgbValuesProvider() : array

@@ -96,7 +96,7 @@ final class HslColor
 
         $delta = $max - $min;
 
-        if ($delta === 0) {
+        if (! ($delta > 0)) {
             $hue = 0;
         } elseif ($max === $r) {
             $hue = ($g - $b) / $delta + ($g < $b ? 6 : 0);
