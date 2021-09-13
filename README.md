@@ -110,8 +110,12 @@ $cmykColor = CmykColor::fromHexColor($hexColorInstance);
 $cmykColor = CmykColor::fromRgbColor($rgbColorInstance);
 
 // get CMYK properties
-$rgbColor->getCyan(); // int(20)
-$rgbColor->getMagenta(); // int(80)
-$rgbColor->getYellow(); // int(65)
-$rgbColor->getKey(); // int(34)
+$cmykColor->getCyan(); // int(20)
+$cmykColor->getMagenta(); // int(80)
+$cmykColor->getYellow(); // int(65)
+$cmykColor->getKey(); // int(34)
+
+// converting to other formats
+$hexColor = $cmykColor->toHex();
+$rgbColor = $cmykColor->toRgb();
 ```
