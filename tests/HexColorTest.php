@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Devlop\Colours\Tests;
 
+use Devlop\Colours\CmykColor;
 use Devlop\Colours\HexColor;
 use Devlop\Colours\HslColor;
 use Devlop\Colours\InvalidColorException;
@@ -258,6 +259,54 @@ final class HexColorTest extends TestCase
     public function getBlue_returns_rgb_blue() : void
     {
         $this->assertSame(214, (new HexColor('#9BBDD6'))->getBlue());
+    }
+
+    /**
+     * @test
+     * @group cmyk
+     */
+    public function it_converts_to_CmykColor() : void
+    {
+        $this->assertInstanceOf(
+            CmykColor::class,
+            (new HexColor('#709e52'))->toCmyk(),
+        );
+    }
+
+    /**
+     * @test
+     * @group cmyk
+     */
+    public function getCyan_returns_cmyk_cyan() : void
+    {
+        $this->assertSame(29, (new HexColor('#709e52'))->getCyan());
+    }
+
+    /**
+     * @test
+     * @group cmyk
+     */
+    public function getMagenta_returns_cmyk_magenta() : void
+    {
+        $this->assertSame(0, (new HexColor('#709e52'))->getMagenta());
+    }
+
+    /**
+     * @test
+     * @group cmyk
+     */
+    public function getYellow_returns_cmyk_yellow() : void
+    {
+        $this->assertSame(48, (new HexColor('#709e52'))->getYellow());
+    }
+
+    /**
+     * @test
+     * @group cmyk
+     */
+    public function getKey_returns_cmyk_key() : void
+    {
+        $this->assertSame(38, (new HexColor('#709e52'))->getKey());
     }
 
     public function validHexStringsWithLeadingHashProvider() : array

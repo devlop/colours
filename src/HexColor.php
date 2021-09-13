@@ -144,6 +144,22 @@ final class HexColor implements Stringable
     }
 
     /**
+     * Convert to RgbColor.
+     */
+    public function toRgb() : RgbColor
+    {
+        return RgbColor::fromHexColor($this);
+    }
+
+    /**
+     * Convert to CmykColor.
+     */
+    public function toCmyk() : CmykColor
+    {
+        return CmykColor::fromHexColor($this);
+    }
+
+    /**
      * Get the HSL hue.
      */
     public function getHue() : int
@@ -176,14 +192,6 @@ final class HexColor implements Stringable
     }
 
     /**
-     * Convert to RgbColor.
-     */
-    public function toRgb() : RgbColor
-    {
-        return RgbColor::fromHexColor($this);
-    }
-
-    /**
      * Get the RGB red.
      */
     public function getRed() : int
@@ -205,6 +213,38 @@ final class HexColor implements Stringable
     public function getBlue() : int
     {
         return $this->toRgb()->getBlue();
+    }
+
+    /**
+     * Get the CMYK cyan value.
+     */
+    public function getCyan() : int
+    {
+        return $this->toCmyk()->getCyan();
+    }
+
+    /**
+     * Get the CMYK magenta value.
+     */
+    public function getMagenta() : int
+    {
+        return $this->toCmyk()->getMagenta();
+    }
+
+    /**
+     * Get the CMYK yellow value.
+     */
+    public function getYellow() : int
+    {
+        return $this->toCmyk()->getYellow();
+    }
+
+    /**
+     * Get the CMYK key value.
+     */
+    public function getKey() : int
+    {
+        return $this->toCmyk()->getKey();
     }
 
     /**

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Devlop\Colours;
 
+use Devlop\Colours\CmykColor;
 use Devlop\Colours\HslColor;
 use Devlop\Colours\InvalidColorException;
 
@@ -105,6 +106,27 @@ final class RgbColor
     }
 
     /**
+     * Create a new instance from a CmykColor instance.
+     */
+    public static function fromCmykColor(CmykColor $cmykColor) : RgbColor
+    {
+        $cyan = $cmykColor->getCyan() / 100;
+        $magenta = $cmykColor->getMagenta() / 100;
+        $yellow = $cmykColor->getYellow() / 100;
+        $key = $cmykColor->getKey() / 100;
+
+        $r = 255 * (1 - $cyan) * (1 - $key);
+        $g = 255 * (1 - $magenta) * (1 - $key);
+        $b = 255 * (1 - $yellow) * (1 - $key);
+
+        return new static(
+            (int) round($r),
+            (int) round($g),
+            (int) round($b),
+        );
+    }
+
+    /**
      * Get the value for red.
      */
     public function getRed() : int
@@ -137,6 +159,22 @@ final class RgbColor
     }
 
     /**
+     * Convert to HexColor.
+     */
+    public function toHex() : HexColor
+    {
+        return HexColor::fromRgbColor($this);
+    }
+
+    /**
+     * Convert to CmykColor.
+     */
+    public function toCmyk() : CmykColor
+    {
+        return CmykColor::fromRgbColor($this);
+    }
+
+    /**
      * Get the HSL hue.
      */
     public function getHue() : int
@@ -161,18 +199,42 @@ final class RgbColor
     }
 
     /**
-     * Convert to HexColor.
-     */
-    public function toHex() : HexColor
-    {
-        return HexColor::fromRgbColor($this);
-    }
-
-    /**
      * Get the hex string.
      */
     public function getHexString() : string
     {
         return $this->toHex()->getHexString();
+    }
+
+    /**
+     * Get the CMYK cyan value.
+     */
+    public function getCyan() : int
+    {
+        return $this->toCmyk()->getCyan();
+    }
+
+    /**
+     * Get the CMYK magenta value.
+     */
+    public function getMagenta() : int
+    {
+        return $this->toCmyk()->getMagenta();
+    }
+
+    /**
+     * Get the CMYK yellow value.
+     */
+    public function getYellow() : int
+    {
+        return $this->toCmyk()->getYellow();
+    }
+
+    /**
+     * Get the CMYK key value.
+     */
+    public function getKey() : int
+    {
+        return $this->toCmyk()->getKey();
     }
 }
