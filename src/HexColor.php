@@ -76,9 +76,9 @@ final class HexColor implements Stringable
 
         $lightnessModifier = $lightness - ($chroma / 2);
 
-        $r = base_convert(round(($r + $lightnessModifier) * 255), 10, 16);
-        $g = base_convert(round(($g + $lightnessModifier) * 255), 10, 16);
-        $b = base_convert(round(($b + $lightnessModifier) * 255), 10, 16);
+        $r = base_convert((string) round(($r + $lightnessModifier) * 255), 10, 16);
+        $g = base_convert((string) round(($g + $lightnessModifier) * 255), 10, 16);
+        $b = base_convert((string) round(($b + $lightnessModifier) * 255), 10, 16);
 
         return new static(implode('', [
             '#',
